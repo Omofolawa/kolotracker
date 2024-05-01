@@ -1,0 +1,272 @@
+from flask import Flask, request, jsonify
+import pyodbc
+import jwt
+from datetime import datetime, timedelta
+
+app = Flask(__name__)
+
+server = 'your_server'
+database = 'your_database'
+username = 'your_username'
+password = 'your_password'
+driver = '{ODBC Driver 17 for SQL Server}'
+secret_key = 'your_secret_key'
+
+def connect_to_database():
+    try:
+        conn = pyodbc.connect(f'DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}')
+        return conn
+    except Exception as e:
+        print(f"Error connecting to database: {str(e)}")
+        return None
+
+# User registration and login endpoints
+
+@app.route('/register', methods=['POST'])
+def register_user():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    email = data.get('email')
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO Users (Username, Password, Email) VALUES (?, ?, ?)", (username, password, email))
+            conn.commit()
+            return jsonify({'message': 'User registered successfully'}), 201
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
+
+@app.route('/login', methods=['POST'])
+def login_user():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM Users WHERE Username = ? AND Password = ?", (username, password))
+            user = cursor.fetchone()
+            if user:
+                # Generate JWT token
+                token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(minutes=30)}, secret_key, algorithm='HS256')
+                return jsonify({'token': token.decode('UTF-8')})
+            else:
+                return jsonify({'error': 'Invalid username or password'}), 401
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
+
+# Authentication middleware
+
+def authenticate_user(token):
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        return payload['username']
+    except jwt.ExpiredSignatureError:
+        return None  # Token has expired
+    except jwt.InvalidTokenError:
+        return None  # Invalid token
+
+@app.route('/expenses', methods=['POST'])
+def create_expense():
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({'error': 'Authorization token is required'}), 401
+
+    username = authenticate_user(token)
+    if not username:
+        return jsonify({'error': 'Invalid or expired token'}), 401
+
+    data = request.json
+    expense_name = data.get('name')
+    amount = data.get('amount')
+    category = data.get('category')
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO Expenses (Username, Name, Amount, Category) VALUES (?, ?, ?, ?)", (username, expense_name, amount, category))
+            conn.commit()
+            return jsonify({'message': 'Expense created successfully'}), 201
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
+
+# Other endpoints for managing expenses (GET, PUT, DELETE) will be implemented similarly...
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# Add these endpoints below the existing code
+
+@app.route('/expenses', methods=['GET'])
+def get_all_expenses():
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({'error': 'Authorization token is required'}), 401
+
+    username = authenticate_user(token)
+    if not username:
+        return jsonify({'error': 'Invalid or expired token'}), 401
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM Expenses WHERE Username = ?", (username,))
+            expenses = cursor.fetchall()
+            return jsonify({'expenses': expenses})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
+
+@app.route('/expenses/<int:expense_id>', methods=['GET'])
+def get_expense(expense_id):
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({'error': 'Authorization token is required'}), 401
+
+    username = authenticate_user(token)
+    if not username:
+        return jsonify({'error': 'Invalid or expired token'}), 401
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM Expenses WHERE Username = ? AND ExpenseID = ?", (username, expense_id))
+            expense = cursor.fetchone()
+            if expense:
+                return jsonify({'expense': expense})
+            else:
+                return jsonify({'error': 'Expense not found'}), 404
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
+
+@app.route('/expenses/<int:expense_id>', methods=['PUT'])
+def update_expense(expense_id):
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({'error': 'Authorization token is required'}), 401
+
+    username = authenticate_user(token)
+    if not username:
+        return jsonify({'error': 'Invalid or expired token'}), 401
+
+    data = request.json
+    new_name = data.get('name')
+    new_amount = data.get('amount')
+    new_category = data.get('category')
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("UPDATE Expenses SET Name = ?, Amount = ?, Category = ? WHERE Username = ? AND ExpenseID = ?", (new_name, new_amount, new_category, username, expense_id))
+            conn.commit()
+            return jsonify({'message': 'Expense updated successfully'})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
+
+@app.route('/expenses/<int:expense_id>', methods=['DELETE'])
+def delete_expense(expense_id):
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({'error': 'Authorization token is required'}), 401
+
+    username = authenticate_user(token)
+    if not username:
+        return jsonify({'error': 'Invalid or expired token'}), 401
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM Expenses WHERE Username = ? AND ExpenseID = ?", (username, expense_id))
+            conn.commit()
+            return jsonify({'message': 'Expense deleted successfully'})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
+
+/*In this update:
+- We added endpoints for retrieving all expenses (`GET /expenses`), retrieving a single expense by ID (`GET /expenses/<expense_id>`), updating an expense (`PUT /expenses/<expense_id>`), and deleting an expense (`DELETE /expenses/<expense_id>`).
+- Each of these endpoints requires authentication using a valid JWT token in the request headers. If the token is missing or invalid, the endpoints return an error response.
+- The `authenticate_user` function validates the JWT token and extracts the username for further authorization checks.*/
+
+
+DATABASE CREATION AND TABLES
+
+--Create Database--
+CREATE BDATABASE koloexptraccker;
+
+--Assign DB to be used--
+USE koloexptracker;
+
+
+-- Create Users table to store user information
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) NOT NULL,
+    Password NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(100) NOT NULL
+);
+
+-- Create Categories table to store expense categories
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY IDENTITY(1,1),
+    CategoryName NVARCHAR(50) NOT NULL
+);
+
+Users: Stores user information such as username, password, and email.
+Categories: Stores expense categories (e.g., groceries, utilities, entertainment).
+Expenses: Stores user expenses, including the associated user ID, category ID, amount, date, and description.
+
+-- Create Expenses table to store user expenses
+CREATE TABLE Expenses (
+    ExpenseID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),
+    Amount DECIMAL(10,2) NOT NULL,
+    ExpenseDate DATE NOT NULL,
+    Description NVARCHAR(255),
+    CONSTRAINT FK_UserExpense FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    CONSTRAINT FK_CategoryExpense FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
