@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolo Expense Tracker</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom styles */
+    body {
+      background-image: url('https://images.unsplash.com/photo-1506784242126-2a0b0b89c56a?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-size: cover;
+      background-position: center;
+      height: 100vh; /* Ensure full viewport height */
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .main-content {
+      text-align: center;
+    }
+    .main-content h3, .main-content h4 {
+      font-size: 36px;
+      color: White; /* white color for text */
+      text-shadow: 2px 2px black; /* black outline */
+    }
+
+    }
+    .main-content form {
+      margin-top: 20px;
+      background-color: rgba(245, 255, 190, 0.7); /* Semi-transparent white background for form */
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .main-content form input[type="text"],
+    .main-content form input[type="password"] {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .main-content form button {
+      width: 100%;
+    }
+    /* Style for invalid input fields */
+    .main-content form input:invalid {
+      border-color: red;
+    }
+    .main-content form input:invalid:focus {
+      border-color: red;
+    }
+    .main-content form input[type="submit"]:invalid {
+      color: red;
+    }
+    .main-content p {
+      font-size: 14px;
+      color: #fff; /* White color for text */
+    }
+  </style>
+</head>
+<body>
+    
+<!-- Main Content -->
+<div class="main-content">
+  <h3>Hello, Kolo Mate</h3>
+  <hr>
+  <h5><bold>Please Login</bold></h5>
+  <hr>
+  <form>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Username" required>
+    </div><br>
+    <div class="form-group">
+      <input type="password" class="form-control" placeholder="Password" required>
+    </div><br>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+  <p class="mt-3">New User? <a href="signup.html">Sign up here</a></p>
+  <!-- Add login with Google button here if needed -->
+</div>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3" style="background-color: rgba(255, 255, 255, 0.7); box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1); width: 100%; position: fixed; bottom: 0;">
+  <div class="container text-center">
+    <!-- APP Made with curiosity! -->
+    <span class="text-muted">App Made with curiosity! | Contact developer:<br>
+      <!-- Email link --><br>
+      <a href="mailto:whoever@gmail.com">Email Developer</a><br>
+      <!-- GitHub link --><br>
+      <a href="https://github.com/Omofolawa/kolotracker" target="_blank">GitHub Repository</a>
+    </span>
+  </div>
+</footer>
+
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="app.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
