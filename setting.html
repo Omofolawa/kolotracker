@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolo Expense Tracker - Settings</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    /* Custom styles */
+    body {
+      background-image: url('https://images.unsplash.com/photo-1506716442075-1e2e0e5b1256?q=80&w=2062&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* image URL here */
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #fff; /* White text color */
+      height: 100vh; /* Ensure full viewport height */
+      margin: 0;
+    }
+    .main-content {
+      text-align: center;
+      color: #fff; /* White text color */
+      margin-top: 50px; /* Adjusted margin to avoid overlap with navbar */
+    }
+    .card {
+      margin: 10px;
+      border: none;
+      border-radius: 15px;
+      transition: transform 0.5s ease;
+      background-color: #445e93; /* Changed background color to a nice color */
+      color: #fff; /* Text color */
+    }
+    .card:hover {
+      transform: scale(0.95); /* Zoom out effect on hover */
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .navbar {
+      z-index: 1000; /* Ensure navbar appears above other content */
+    }
+    .footer {
+      background-color: rgba(68, 98, 147, 0.7);
+      box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+      position: relative;
+      bottom:0;
+    }
+    .form-control {
+      font-size: 0.75em; /* Reduced font size by 3/4 */
+    }
+  </style>
+</head>
+<body>
+    
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><h2><bold>Kolo Expense Tracker</h2></bold></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html"><bold>Home</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="add+expense.html"><bold>Add Expense</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/reports"><bold>Reports</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="settings.html"><bold>Settings</bold></a> <!-- Added settings link -->
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="login.html"><bold>Login</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="logout.html"><bold>Logout</bold></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container main-content">
+  <h1>Settings</h1>
+  <hr>
+  <div class="row justify-content-center">
+    <div class="col-md-8"> <!-- Change password tile now spans full width -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="#changePasswordCollapse" data-toggle="collapse">Change Password</a>
+          </h5>
+          <div id="changePasswordCollapse" class="collapse">
+            <p class="card-text">To ensure security, please enter your old password to validate the change:</p>
+            <form>
+              <div class="form-group">
+                <label for="oldPassword">Old Password</label>
+                <input type="password" class="form-control" id="oldPassword" placeholder="Enter your old password">
+              </div>
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" class="form-control" id="newPassword" placeholder="Enter your new password">
+              </div>
+              <div class="form-group">
+                <label for="repeatNewPassword">Repeat New Password</label>
+                <input type="password" class="form-control" id="repeatNewPassword" placeholder="Repeat your new password">
+              </div>
+              <button type="submit" class="btn btn-primary">Change Password</button>
+            </form>
+          </div>
+        </div>
+      </div><br><br><hr><br>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Notification Settings</h5>
+          <p class="card-text">Customize your notification preferences.</p>
+          <a href="#" class="btn btn-primary">Notification Settings</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Privacy Notice</h5><br>
+          <p class="card-text">We are committed to protecting your privacy. Please review our <a href="#">Privacy Policy</a> for more information.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">App Version</h5><br>
+          <p class="card-text">Version: 1.0.0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Legal Responsibilities</h5>
+          <p class="card-text">By using this app, you agree to abide by our <a href="#">Terms and Conditions</a>. Please review them carefully.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<br><br><hr><br><br>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <!-- APP Made with curiosity! -->
+    <span class="text-muted">App Made with curiosity! | Contact developer:<br>
+      <!-- Email link --><br>
+      <a href="mailto:whoever@gmail.com">Email Developer</a><br>
+      <!-- GitHub link --><br>
+      <a href="https://github.com/Omofolawa/kolotracker" target="_blank">GitHub Repository</a>
+    </span>
+  </div>
+</footer>
+</html>

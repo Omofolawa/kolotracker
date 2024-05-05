@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Kolo</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-Qr8zeqG7BJEorA8JySWrCqx9V3tayUpKTayJ6jxaO/4gyxjT7ElsjCK1blb9UVw6OGwWUNMuqCr1wnJqcKDtzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Adding a style tag for background picture -->
+  <style>
+    body {
+      background-image: url('https://images.unsplash.com/photo-1530543787849-128d94430c6b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
+      background-size: cover;
+      background-position: center;
+      height: 100vh; /* Ensure full viewport height */
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><h2>Kolo Expense Tracker</h2></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="add+expense.html">Add Expense</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Reports</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="logout.html">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <!-- Greeting and User Profile Information -->
+          <div class="row">
+            <div class="col-md-6">
+              <h4>Welcome, Dear [Username]!</h4>
+              <p>This is your personal expense tracker. Start managing your expenses efficiently.</p>
+            </div>
+            <div class="col-md-6">
+              <!-- User Profile Information -->
+              <div class="text-right">
+                <img src="https://images.unsplash.com/photo-1425082661705-1834bfd09dca?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Profile Picture" class="img-thumbnail" style="width: 135px; height: auto;">
+                <p><strong>Name:</strong> [User's Name]</p>
+                <p><strong>Email:</strong> [User's Email]</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Recent Expenses Overview -->
+          <hr>
+          <h4>Recent Expenses Overview</h4>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2024-05-01</td>
+                  <td>Food & Dining</td>
+                  <td>£50.00</td>
+                </tr>
+                <tr>
+                  <td>2024-05-02</td>
+                  <td>Donation</td>
+                  <td>£23.00</td>
+                </tr>
+                <!-- Add more rows for recent expenses -->
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Graphical Representation of Expenses -->
+          <hr>
+          <h4>Expense Distribution</h4>
+          <div id="expenseChart" style="height: 300px;"></div>
+          
+          <!-- Settings and Feedback -->
+          <hr>
+          <div class="text-center">
+            <a href="setting.html">Settings</a> | <a href="rating.html">Feedback</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br><hr><br><br>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3" style="background-color: rgba(255, 255, 255, 0.7); box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1); width: 100%; position: relative; bottom: 0;">
+  <div class="container text-center">
+    <!-- APP Made with curiosity! -->
+    <span class="text-muted">App Made with curiosity! | Contact developer:<br>
+      <!-- Email link --><br>
+      <a href="mailto:whoever@gmail.com">Email Developer</a><br>
+      <!-- GitHub link --><br>
+      <a href="https://github.com/Omofolawa/kolotracker" target="_blank">GitHub Repository</a>
+    </span>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  // Sample data for the expense distribution chart
+  var options = {
+    chart: {
+      type: 'pie',
+      height: 300,
+    },
+    series: [20, 30, 15, 35], // Sample data, replace with actual expense data
+    labels: ['Food & Dining', 'Transportation', 'Entertainment', 'Others'], // Sample labels
+    colors: ['#3f51b5', '#009688', '#ff5722', '#607d8b'], // Sample colors
+  }
+
+  var chart = new ApexCharts(document.querySelector("#expenseChart"), options);
+  chart.render();
+</script>
+</body>
+</html>

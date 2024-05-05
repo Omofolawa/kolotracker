@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolo Expense Tracker</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom styles */
+    body {
+      background-image: url('https://images.unsplash.com/photo-1506784242126-2a0b0b89c56a?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-size: cover;
+      background-position: center;
+      height: 100vh; /* Ensure full viewport height */
+      margin: 0;
+    }
+    .main-content {
+      text-align: center;
+      color: #003; /* dark blue text color */
+      margin-top: 100px; /* Adjusted margin to avoid overlap with navbar */
+    }
+    .card {
+      margin: 10px;
+      border: none;
+      border-radius: 15px;
+      transition: transform 0.5s ease;
+      background-color: rgba(255, 220, 130, 0.8); /* Semi-transparent white background for cards */
+    }
+    .card:hover {
+      transform: scale(1.05); /* Zoom out effect on hover */
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .navbar {
+      z-index: 1000; /* Ensure navbar appears above other content */
+    }
+    .footer {
+      background-color: rgba(255, 255, 255, 0.7);
+      box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+      position: relative;
+      bottom:0;
+    }
+  </style>
+</head>
+<body>
+    
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="index.html"><h2><bold>Kolo Expense Tracker</h2></bold></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html"><bold>Home</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="add+expense.html"><bold>Add Expense</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/reports"><bold>Reports</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="login.html"><bold>Login</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="logout.html"><bold>Logout</bold></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container main-content">
+<h2>About Kolo</h2>
+  <div class="row">
+    <div class="col-md-14">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Introduction</h5>
+          <p class="card-text">Kolo Tracker was born from a simple idea: to simplify personal finance management. Our motivation stemmed from the widespread need for better financial tools. We aimed to create an intuitive app that empowers users to take control of their money.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-14">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Development and Implementation</h5>
+          <p class="card-text">Our team meticulously planned, coded, and tested Kolo Tracker to ensure a seamless user experience. From database design to algorithm implementation, every aspect was crafted with precision. Security and privacy were paramount, with industry-standard encryption protocols safeguarding users' data.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-14">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">The Big Dream</h5>
+          <p class="card-text">Our vision for Kolo Tracker extends beyond its current capabilities. We aspire to offer it as a portable mobile app, accessible anytime, anywhere. Integration with bank accounts for automatic reconciliation is on the horizon. Ultimately, Kolo Tracker aims to evolve into a comprehensive financial companion, offering personalized advice to help users achieve financial success.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br><hr><br><br>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <!-- APP Made with curiosity! -->
+    <span class="text-muted">App Made with curiosity! | Contact developer:<br>
+      <!-- Email link --><br>
+      <a href="mailto:whoever@gmail.com">Email Developer</a><br>
+      <!-- GitHub link --><br>
+      <a href="https://github.com/Omofolawa/kolotracker" target="_blank">GitHub Repository</a>
+    </span>
+  </div>
+</footer>
+
+</html>

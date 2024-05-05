@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolo Expense Tracker</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-Qr8zeqG7BJEorA8JySWrCqx9V3tayUpKTayJ6jxaO/4gyxjT7ElsjCK1blb9UVw6OGwWUNMuqCr1wnJqcKDtzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ <style>
+    /* I may add more custom styles here if necessary */
+    body {
+      background-image: url('https://images.unsplash.com/photo-1625225233840-695456021cde?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-size: cover;
+      background-position: center;
+      height: 100vh; /* Ensure full viewport height */
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="index.html"><h2>Kolo Expense Tracker</h2></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="add+expense.html">Add Expense</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/reports">Reports</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="logout.html">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h3>Add Expense</h3>
+      <form id="expenseForm">
+        <div class="form-group">
+          <label for="expenseName">Name</label>
+          <input type="text" class="form-control" id="expenseName" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="expenseAmount">Amount</label>
+          <input type="number" class="form-control" id="expenseAmount" name="amount" required>
+        </div>
+        <div class="form-group">
+          <label for="expenseCategory">Category</label>
+          <select class="form-control" id="expenseCategory" name="category" required>
+            <option value="" disabled selected>Select category</option>
+            <option value="Food & Dining">Food & Dining</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Transportation">Transportation</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Rent/Mortgage">Rent/Mortgage</option>
+            <option value="Insurance">Insurance</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Travel">Travel</option>
+            <option value="Clothing & Accessories">Clothing & Accessories</option>
+            <option value="Health & Fitness">Health & Fitness</option>
+            <option value="Education">Education</option>
+            <option value="Gifts & Donations">Gifts & Donations</option>
+            <option value="Personal Care">Personal Care</option>
+            <option value="Household Supplies">Household Supplies</option>
+            <option value="Pet Expenses">Pet Expenses</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Expense</button>
+      </form>
+    </div>
+  </div>
+
+  <hr><br><br><hr>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h3>Expenses</h3>
+      <ul id="expenseList" class="list-group">
+        <!-- Expense items will be dynamically added here -->
+      </ul>
+    </div>
+  </div>
+</div>
+<br><br><hr><br><br>
+
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3" style="background-color: rgba(255, 255, 255, 0.7); box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1); width: 100%; position: relative; bottom: 0;">
+  <div class="container text-center">
+    <!-- APP Made with curiosity! -->
+    <span class="text-muted">App Made with curiosity! | Contact developer:<br>
+      <!-- Email link --><br>
+      <a href="mailto:whoever@gmail.com">Email Developer</a><br>
+      <!-- GitHub link --><br>
+      <a href="https://github.com/Omofolawa/kolotracker" target="_blank">GitHub Repository</a>
+    </span>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+// Function to fetch and display expenses
+function fetchExpenses() {
+  $.ajax({
+    url: '/api/expenses',
+    method: 'GET',
+    success: function(data) {
+      // Clear existing list
+      $('#expenseList').empty();
+
+      // Populate list with fetched expenses
+      data.forEach(function(expense) {
+        $('#expenseList').append(`<li class="list-group-item">${expense.name} - ${expense.amount} - ${expense.category}</li>`);
+      });
+    },
+    error: function(err) {
+      console.error('Error fetching expenses:', err);
+    }
+  });
+}
+
+// Function to handle form submission for adding expenses
+$('#expenseForm').submit(function(event) {
+  event.preventDefault();
+
+  // Get form data
+  const formData = {
+    name: $('#expenseName').val(),
+    amount: $('#expenseAmount').val(),
+    category: $('#expenseCategory').val()
+  };
+
+  // Send POST request to add expense
+  $.ajax({
+    url: '/api/expenses',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(formData),
+    success: function(data) {
+      console.log('Expense added successfully:', data);
+      // Fetch and display updated expenses
+      fetchExpenses();
+      // Reset form fields
+      $('#expenseName').val('');
+      $('#expenseAmount').val('');
+      $('#expenseCategory').val('');
+    },
+    error: function(err) {
+      console.error('Error adding expense:', err);
+    }
+  });
+});
+
+// Fetch and display expenses when page loads
+$(document).ready(function() {
+  fetchExpenses();
+});
+
+</script>
+</body>
+</html>
