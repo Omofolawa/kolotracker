@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kolo Expense Tracker - Settings</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom styles */
+    body {
+      background-image: url('https://images.unsplash.com/photo-1711994872181-1e112e5e18e0?q=80&w=1860&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Change 'your-image-url.jpg' to the URL of your image */
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #fff; /* White text color */
+      height: 100vh; /* Ensure full viewport height */
+      margin: 0;
+    }
+    .main-content {
+      text-align: center;
+      color: #fff; /* White text color */
+      margin-top: 50px; /* Adjusted margin to avoid overlap with navbar */
+    }
+    .card {
+      margin: 10px;
+      border: none;
+      border-radius: 15px;
+      transition: transform 0.5s ease;
+      background-color: #412e93; /* Changed background color to a nice color */
+      color: #fff; /* Text color */
+      max-width: 600px; /* Reduced max-width to make the card smaller */
+    }
+    .card:hover {
+      transform: scale(0.95); /* Zoom out effect on hover */
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .navbar {
+      z-index: 1000; /* Ensure navbar appears above other content */
+    }
+    .footer {
+      background-color: rgba(255, 255, 255, 0.7);
+      box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+      position: relative;
+      bottom:0;
+    }
+    .form-control {
+      font-size: 0.75em; /* Reduced font size by 3/4 */
+    }
+  </style>
+</head>
+<body>
+    
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><h2><bold>Kolo Expense Tracker</h2></bold></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html"><bold>Home</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="add+expense.html"><bold>Add Expense</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/reports"><bold>Reports</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="settings.html"><bold>Settings</bold></a> <!-- Added settings link -->
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="login.html"><bold>Login</bold></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="logout.html"><bold>Logout</bold></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container main-content">
+  <h1>FAQ</h1>
+  <hr>
+  <!-- FAQ Section -->
+  <h3>Frequently Asked Questions</h3><br><hr>
+  <div class="faq-list">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="#faq1" data-toggle="collapse">How do I change my password?</a>
+        </h5>
+        <div id="faq1" class="collapse">
+          <p class="card-text">To change your password, go to the "Change Password" section and enter your old password along with the new password you want to set. Then click on the "Change Password" button.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="#faq2" data-toggle="collapse">Can I customize my notification settings?</a>
+        </h5>
+        <div id="faq2" class="collapse">
+          <p class="card-text">Yes, you can customize your notification preferences in the "Notification Settings" section. Click on the link provided to access the notification settings.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="#faq3" data-toggle="collapse">Where can I find the app version?</a>
+        </h5>
+        <div id="faq3" class="collapse">
+          <p class="card-text">You can find the current version of the app in the "App Version" section. It displays the version number of the app.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="#faq4" data-toggle="collapse">What are my legal responsibilities?</a>
+        </h5>
+        <div id="faq4" class="collapse">
+          <p class="card-text">By using this app, you agree to abide by our Terms and Conditions. You can find more information about your legal responsibilities in the "Legal Responsibilities" section.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="#faq5" data-toggle="collapse">Where can I review the privacy notice?</a>
+        </h5>
+        <div id="faq5" class="collapse">
+          <p class="card-text">You can review our Privacy Notice in the "Privacy Notice" section. Click on the link provided to access the privacy policy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<br><br><hr><br><br>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <!-- APP Made with curiosity! -->
+    <span class="text-muted">App Made with curiosity! | Contact developer:<br>
+      <!-- Email link --><br>
+      <a href="mailto:whoever@gmail.com">Email Developer</a><br>
+      <!-- GitHub link --><br>
+      <a href="https://github.com/Omofolawa/kolotracker" target="_blank">GitHub Repository</a>
+    </span>
+  </div>
+</footer>
+
+<!-- jQuery and Bootstrap Bundle with Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>
