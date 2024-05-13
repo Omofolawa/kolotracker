@@ -366,3 +366,97 @@ CODE KEY WORDS
     - This function decodes and verifies the JWT token received from the client. If the token is valid, it returns the username extracted from the token; otherwise, it returns `None`.
 
 These functions collectively handle user registration, login, and authentication within a Flask application, interacting with a database and using JWT for authentication.
+
+13MAY2024 UPDATE
+from flask import Flask, request, jsonify, abort
+import hashlib
+import re
+import pyodbc
+
+app = Flask(__name__)
+
+# Validate email format
+def validate_email(email):
+    return re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email)
+
+# Validate password complexity
+def validate_password(password):
+    return len(password) >= 8
+
+# Establish connection to SQL Server database
+def connect_to_database():
+    try:
+        server = 'DESKTOP-77TM42R\SQLEXPRESS01'
+        database = 'koloexptracker'
+        conn = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';Trusted_Connection=yes;')
+        return conn
+    except Exception as e:
+        print(f"Error connecting to database: {str(e)}")
+        return None
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.json
+    if not data or not all(key in data for key in ['username', 'email', 'password']):
+        abort(400, 'Missing required fields')
+
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not validate_email(email):
+        abort(400, 'Invalid email format')
+
+    if not validate_password(password):
+        abort(400, 'Password must be at least 8 characters long')
+
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    # Database insertion logic
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO Users (Username, Email, Password) VALUES (?, ?, ?)", (username, email, hashed_password))
+            conn.commit()
+            return jsonify({'message': 'User signed up successfully'}), 201
+        except Exception as e:
+            abort(500, 'Error signing up user')
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        abort(500, 'Error connecting to the database')
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    if not data or not all(key in data for key in ['username', 'password']):
+        abort(400, 'Missing required fields')
+
+    username = data.get('username')
+    password = data.get('password')
+
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    # Database retrieval logic
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT Password FROM Users WHERE Username = ?", (username,))
+            stored_hashed_password = cursor.fetchone()
+            if stored_hashed_password and hashed_password == stored_hashed_password[0]:
+                return jsonify({'message': 'Login successful'})
+            else:
+                abort(401, 'Invalid username or password')
+        except Exception as e:
+            abort(500, 'Error logging in user')
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        abort(500, 'Error connecting to the database')
+
+if __name__ == '__main__':
+    app.run(debug=True)
