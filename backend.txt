@@ -5,27 +5,12 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-server = 'DESKTOP-77TM42R\SQLEXPRESS01'
+server = 'your_server'
 database = 'koloexptracker'
-username = 'DESKTOP-77TM42R\omofo'
-password = '3080'
+username = 'your_username'
+password = 'your_password'
 driver = '{ODBC Driver 17 for SQL Server}'
-secret_key = 'nonofyourbusiness'
-
-from flask import Flask, request, jsonify
-import pyodbc
-import bcrypt
-import jwt
-from datetime import datetime, timedelta
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'nonofyourbusiness'
-
-server = 'DESKTOP-77TM42R\SQLEXPRESS01'
-database = 'koloexptracker'
-username = 'DESKTOP-77TM42R\omofo'
-password = '3080'
-driver = '{ODBC Driver 17 for SQL Server}'
+secret_key = 'notyourbusiness'
 
 def connect_to_database():
     try:
@@ -35,29 +20,29 @@ def connect_to_database():
         print(f"Error connecting to database: {str(e)}")
         return None
 
-@app.route('/register', methods=['POST'])
-def register_user():
+# User registration and login endpoints
+
+@app.route('/signup', methods=['POST'])
+def signup_user():
     data = request.json
     username = data.get('username')
     password = data.get('password')
     email = data.get('email')
 
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
     conn = connect_to_database()
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO Users (Username, Password, Email) VALUES (?, ?, ?)", (username, hashed_password, email))
+            cursor.execute("INSERT INTO Users (Username, Password, Email) VALUES (?, ?, ?)", (username, password, email))
             conn.commit()
             return jsonify({'message': 'User registered successfully'}), 201
         except Exception as e:
-            return jsonify({'error': 'Failed to register user'}), 500
+            return jsonify({'error': str(e)}), 500
         finally:
             cursor.close()
             conn.close()
     else:
-        return jsonify({'error': 'Unable to connect to the database'}), 500
+        return jsonify({'error': 'Unable to connect to the database, please try again'}), 500
 
 @app.route('/login', methods=['POST'])
 def login_user():
@@ -69,34 +54,42 @@ def login_user():
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute("SELECT Password FROM Users WHERE Username = ?", (username,))
-            result = cursor.fetchone()
-            if result and bcrypt.checkpw(password.encode('utf-8'), result[0].encode('utf-8')):
-                token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET_KEY'], algorithm='HS256')
-                return jsonify({'token': token.decode('utf-8')})
+            cursor.execute("SELECT * FROM Users WHERE Username = ? AND Password = ?", (username, password))
+            user = cursor.fetchone()
+            if user:
+                # Generate Json Web T token for secure data transmission as a json object
+                token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(minutes=30)}, secret_key, algorithm='HS256')
+                return jsonify({'token': token.decode('UTF-8')})
             else:
                 return jsonify({'error': 'Invalid username or password'}), 401
         except Exception as e:
-            return jsonify({'error': 'Failed to authenticate user'}), 500
+            return jsonify({'error': str(e)}), 500
         finally:
             cursor.close()
             conn.close()
     else:
-        return jsonify({'error': 'Unable to connect to the database'}), 500
+        return jsonify({'error': 'Unable to connect to the database, please try again'}), 500
 
-@app.route('/expenses', methods=['POST'])
+# Authentication middleware
+
+def authenticate_user(token):
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        return payload['username']
+    except jwt.ExpiredSignatureError:
+        return None  # Token has expired
+    except jwt.InvalidTokenError:
+        return None  # Invalid token
+
+@app.route('/add+expenses', methods=['POST'])
 def create_expense():
     token = request.headers.get('Authorization')
     if not token:
         return jsonify({'error': 'Authorization token is required'}), 401
 
-    try:
-        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-        username = payload['username']
-    except jwt.ExpiredSignatureError:
-        return jsonify({'error': 'Token has expired'}), 401
-    except jwt.InvalidTokenError:
-        return jsonify({'error': 'Invalid token'}), 401
+    username = authenticate_user(token)
+    if not username:
+        return jsonify({'error': 'Invalid or expired token'}), 401
 
     data = request.json
     expense_name = data.get('name')
@@ -111,14 +104,39 @@ def create_expense():
             conn.commit()
             return jsonify({'message': 'Expense created successfully'}), 201
         except Exception as e:
-            return jsonify({'error': 'Failed to create expense'}), 500
+            return jsonify({'error': str(e)}), 500
         finally:
             cursor.close()
             conn.close()
     else:
         return jsonify({'error': 'Unable to connect to the database'}), 500
 
-# Add these endpoints below the existing code
+# Other endpoints for managing expenses (GET, PUT, DELETE) will be implemented below as follows...
+
+@app.route('/expenses', methods=['GET'])
+def get_all_expenses():
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({'error': 'Authorization token is required'}), 401
+
+    username = authenticate_user(token)
+    if not username:
+        return jsonify({'error': 'Invalid or expired token'}), 401
+
+    conn = connect_to_database()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM Expenses WHERE Username = ?", (username,))
+            expenses = cursor.fetchall()
+            return jsonify({'expenses': expenses})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        return jsonify({'error': 'Unable to connect to the database'}), 500
 
 @app.route('/expenses/<int:expense_id>', methods=['GET'])
 def get_expense(expense_id):
@@ -203,11 +221,148 @@ def delete_expense(expense_id):
     else:
         return jsonify({'error': 'Unable to connect to the database'}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+/*In this update:
+- We added endpoints for retrieving all expenses (`GET /expenses`), retrieving a single expense by ID (`GET /expenses/<expense_id>`), updating an expense (`PUT /expenses/<expense_id>`), and deleting an expense (`DELETE /expenses/<expense_id>`).
+- Each of these endpoints requires authentication using a valid JWT token in the request headers. If the token is missing or invalid, the endpoints return an error response.
+- The authenticate_user function validates the JWT token and extracts the username for further authorization checks.*/
 
 
-#*In this update:
-#We added endpoints for retrieving all expenses (`GET /expenses`), retrieving a single expense by ID (`GET /expenses/<expense_id>`), updating an expense (`PUT /expenses/<expense_id>`), and deleting an expense (`DELETE /expenses/<expense_id>`).
-#Each of these endpoints requires authentication using a valid JWT token in the request headers. If the token is missing or invalid, the endpoints return an error response.
-#The `authenticate_user` function validates the JWT token and extracts the username for further authorization checks.*/
+DATABASE CREATION AND TABLES
+
+--Create Database--
+CREATE BDATABASE koloexptraccker;
+
+--Assign DB to be used--
+USE koloexptracker;
+
+
+-- Create Users table to store user information
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) NOT NULL,
+    Password NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(100) NOT NULL
+);
+
+-- Create Categories table to store expense categories
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY IDENTITY(1,1),
+    CategoryName NVARCHAR(50) NOT NULL
+);
+
+Users: Stores user information such as username, password, and email.
+Categories: Stores expense categories (e.g., groceries, utilities, entertainment).
+Expenses: Stores user expenses, including the associated user ID, category ID, amount, date, and description.
+Suggestions: stores user suggestions on new features they would like to be implemented on the web app, and also general feedbacks on existing features.
+Ratings: stores user ratings and their experiences.
+
+-- Create Expenses table to store user expenses
+CREATE TABLE Expenses (
+    ExpenseID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),
+    Amount DECIMAL(10,2) NOT NULL,
+    ExpenseDate DATE NOT NULL,
+    Description NVARCHAR(255),
+    CONSTRAINT FK_UserExpense FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    CONSTRAINT FK_CategoryExpense FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
+
+--Create Suggestions table to store user suggestions
+CREATE TABLE Suggestions (
+    SuggestionID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCE Users(UserID),
+    Comment TEXT (500)
+);
+
+--Create Ratings Table to store user ratings
+CREATE TABLE Ratings (
+    ID INT PRIMARY KEY IDENTITY(1,1)
+    UserID INT FOREIGN KEY REFERENCE Users(UserID),
+    Rating INT NOT NULL,
+    Comment NVARCHAR(255)
+);
+
+-- Create Category table
+CREATE TABLE Category (
+    CategoryID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL
+);
+
+-- Insert expense categories into the Category table
+INSERT INTO Category (Name)
+VALUES
+('Food & Dining'),
+('Groceries'),
+('Transportation'),
+('Utilities'),
+('Rent/Mortgage'),
+('Insurance'),
+('Entertainment'),
+('Travel'),
+('Clothing & Accessories'),
+('Health & Fitness'),
+('Education'),
+('Gifts & Donations'),
+('Personal Care'),
+('Household Supplies'),
+('Pet Expenses'),
+('Miscellaneous');
+
+
+CODE KEY WORDS
+1. @app.route('/signup', methods=['POST']):
+   - This is a decorator that maps the `/signup` URL to the `signup_user()` function and specifies that it should only respond to POST requests.
+
+2. def signup_user()::
+   - This is the definition of the `signup_user()` function, which handles user signup.
+
+3. data = request.json:
+   - This line extracts JSON data from the request object sent by the client.
+
+4. username = data.get('username'):
+   - It retrieves the value of the `'username'` field from the JSON data.
+
+5. password = data.get('password'):
+   - Similarly, it retrieves the value of the `'password'` field from the JSON data.
+
+6. email = data.get('email'):
+   - It retrieves the value of the `'email'` field from the JSON data.
+
+7. conn = connect_to_database():
+   - It establishes a connection to the database.
+
+8. if conn:`**:
+   - It checks if the database connection was successful.
+
+9. cursor = conn.cursor():
+   - It creates a cursor object to execute SQL queries.
+
+10. cursor.execute("INSERT INTO Users (Username, Password, Email) VALUES (?, ?, ?)", (username, password, email)):
+    - This line executes an SQL `INSERT` query to add a new user to the `Users` table in the database.
+
+11. conn.commit():
+    - It commits the transaction, saving changes to the database.
+
+12. return jsonify({'message': 'User registered successfully'}), 201:
+    - It returns a JSON response indicating successful user registration with status code 201 (Created).
+
+13. except Exception as e: :
+    - It catches any exceptions that occur during database operations.
+
+14. return jsonify({'error': str(e)}), 500:
+    - It returns a JSON response indicating an error with status code 500 (Internal Server Error).
+
+15. finally: :
+    - This block of code will always execute, regardless of whether an exception occurred or not.
+
+16. cursor.close()`** and **`conn.close():
+    - These lines close the cursor and database connection respectively, releasing resources.
+
+17. The `login_user()` Function:
+    - This function follows a similar structure to `signup_user()` but handles user login. It checks the username and password against the database and generates a JWT token upon successful login.
+
+18. The `authenticate_user()` Function:
+    - This function decodes and verifies the JWT token received from the client. If the token is valid, it returns the username extracted from the token; otherwise, it returns `None`.
+
+These functions collectively handle user registration, login, and authentication within a Flask application, interacting with a database and using JWT for authentication.
