@@ -257,13 +257,13 @@ Suggestions: stores user suggestions on new features they would like to be imple
 Ratings: stores user ratings and their experiences.
 
 -- Create Expenses table to store user expenses
-CREATE TABLE Expenses (
-    ExpenseID INT PRIMARY KEY IDENTITY(1,1),
-    UserID INT FOREIGN KEY REFERENCES Users(UserID),
-    CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),
-    Amount DECIMAL(10,2) NOT NULL,
-    ExpenseDate DATE NOT NULL,
-    Description NVARCHAR(255),
+CREATE TABLE [dbo].[Expenses] (
+    [ExpenseID] INT PRIMARY KEY IDENTITY(1,1),
+    [UserID] INT,
+    [Description] NVARCHAR(255),
+    [Amount] DECIMAL(10,2),
+    [CategoryID] INT,
+    [Timestamp] DATETIME DEFAULT GETDATE(),
     CONSTRAINT FK_UserExpense FOREIGN KEY (UserID) REFERENCES Users(UserID),
     CONSTRAINT FK_CategoryExpense FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
