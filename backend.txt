@@ -274,6 +274,13 @@ CREATE TABLE [dbo].[Expenses] (
     CONSTRAINT FK_CategoryExpense FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
 
+INSERT INTO [dbo].[Expenses] ([UserID], [Description], [Amount], [CategoryID], [Timestamp])
+VALUES
+(1, 'Grocery shopping', 150.75, 2, GETDATE()),
+(2, 'Monthly rent', 1200.00, 5, GETDATE()),
+(3, 'Dinner at a restaurant', 45.50, 1, GETDATE());
+
+
 --Create Suggestions table to store user suggestions
 CREATE TABLE Suggestions (
     SuggestionID INT PRIMARY KEY IDENTITY(1,1),
