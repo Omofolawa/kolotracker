@@ -281,6 +281,13 @@ CREATE TABLE Suggestions (
     Comment TEXT (500)
 );
 
+INSERT INTO [dbo].[Suggestions] ([UserID], [Comment])
+VALUES
+(1, 'Add more detailed expense reports.'),
+(2, 'Introduce a dark mode option.'),
+(3, 'Include a currency conversion feature.');
+
+
 CREATE TABLE [dbo].[Ratings] (
     [ID] INT PRIMARY KEY IDENTITY(1,1),
     [UserID] INT FOREIGN KEY REFERENCES Users(UserID),
