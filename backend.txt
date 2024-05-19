@@ -244,6 +244,12 @@ CREATE TABLE Users (
     Email NVARCHAR(100) NOT NULL
 );
 
+INSERT INTO [koloexptracker].[dbo].[Users] ([Username], [Password], [Email])
+VALUES 
+('user1', HASHBYTES('SHA2_256', 'Password1!'), 'user1@example.com'),
+('user2', HASHBYTES('SHA2_256', 'Password2!'), 'user2@example.com'),
+('user3', HASHBYTES('SHA2_256', 'Password3!'), 'user3@example.com');
+
 -- Create Categories table to store expense categories
 CREATE TABLE Categories (
     CategoryID INT PRIMARY KEY IDENTITY(1,1),
