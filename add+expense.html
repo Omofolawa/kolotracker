@@ -38,6 +38,9 @@
         <a class="nav-link" href="/reports">Reports</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="setting.html">Setting</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="logout.html">Logout</a>
       </li>
     </ul>
@@ -51,8 +54,8 @@
       <h3>Add Expense</h3>
       <form id="expenseForm">
         <div class="form-group">
-          <label for="expenseName">Name</label>
-          <input type="text" class="form-control" id="expenseName" name="name" required>
+          <label for="expenseName">Description</label>
+          <input type="text" class="form-control" id="expenseDescription" name="description" required>
         </div>
         <div class="form-group">
           <label for="expenseAmount">Amount</label>
@@ -85,7 +88,7 @@
     </div>
   </div>
 
-  <hr><br><br><hr>
+  <hr><br><br><br>
 
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -129,7 +132,7 @@ function fetchExpenses() {
 
       // Populate list with fetched expenses
       data.forEach(function(expense) {
-        $('#expenseList').append(`<li class="list-group-item">${expense.name} - ${expense.amount} - ${expense.category}</li>`);
+        $('#expenseList').append(`<li class="list-group-item">${expense.description} - ${expense.amount} - ${expense.category}</li>`);
       });
     },
     error: function(err) {
@@ -144,7 +147,7 @@ $('#expenseForm').submit(function(event) {
 
   // Get form data
   const formData = {
-    name: $('#expenseName').val(),
+    name: $('#expenseDescription').val(),
     amount: $('#expenseAmount').val(),
     category: $('#expenseCategory').val()
   };
@@ -160,7 +163,7 @@ $('#expenseForm').submit(function(event) {
       // Fetch and display updated expenses
       fetchExpenses();
       // Reset form fields
-      $('#expenseName').val('');
+      $('#expenseDescription').val('');
       $('#expenseAmount').val('');
       $('#expenseCategory').val('');
     },
