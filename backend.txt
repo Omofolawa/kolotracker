@@ -281,13 +281,34 @@ CREATE TABLE Suggestions (
     Comment TEXT (500)
 );
 
---Create Ratings Table to store user ratings
-CREATE TABLE Ratings (
-    ID INT PRIMARY KEY IDENTITY(1,1)
-    UserID INT FOREIGN KEY REFERENCE Users(UserID),
-    Rating INT NOT NULL,
-    Comment NVARCHAR(255)
+CREATE TABLE [dbo].[Ratings] (
+    [ID] INT PRIMARY KEY IDENTITY(1,1),
+    [UserID] INT FOREIGN KEY REFERENCES Users(UserID),
+    [Rating] INT NOT NULL CHECK (Rating BETWEEN 1 AND 5),
+    [Comment] NVARCHAR(255),
+    FOREIGN KEY (Rating) REFERENCES RatingDescriptions(Rating)
 );
+
+
+CREATE TABLE [dbo].[RatingDescriptions] (
+    [Rating] INT PRIMARY KEY CHECK (Rating BETWEEN 1 AND 5),
+    [Description] NVARCHAR(50) NOT NULL
+);
+
+-- Insert rating descriptions
+INSERT INTO [dbo].[RatingDescriptions] ([Rating], [Description])
+VALUES
+(1, 'Poor'),
+(2, 'Fair'),
+(3, 'Good'),
+(4, 'Very Good'),
+(5, 'Excellent');
+
+INSERT INTO [dbo].[Ratings] ([UserID], [Rating], [Comment])
+VALUES
+(1, 5, 'Excellent service!'),
+(2, 3, 'It was okay.'),
+(3, 2, 'Fair experience.');
 
 -- Create Category table
 CREATE TABLE Category (
