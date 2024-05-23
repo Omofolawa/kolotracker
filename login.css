@@ -1,0 +1,52 @@
+/* Custom styles */
+body {
+  background-image: url('https://images.unsplash.com/photo-1505699261378-c372af38134c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh; /* Ensure full viewport height */
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1; /* Expand main content to fill remaining space */
+  text-align: center;
+  padding: 20px;
+}
+
+.main-content h3, .main-content h5 {
+  font-size: 24px;
+  color: white; /* White color for text */
+  text-shadow: 2px 2px black; /* Black outline */
+}
+
+.main-content form {
+  background-color: rgba(200, 65, 110, 0.6); /* Semi-transparent background for form */
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px; /* Set maximum width for the form */
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+.main-content form .form-control {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.main-content form button {
+  width: 100%;
+}
+
+.main-content p {
+  font-size: 14px;
+  color: #fff; /* White color for text */
+}
+
+.footer {
+  background-color: rgba(128, 85, 128, 0.7);
+  box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
+}
