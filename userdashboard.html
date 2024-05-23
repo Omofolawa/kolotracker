@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Kolo</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="user.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-Qr8zeqG7BJEorA8JySWrCqx9V3tayUpKTayJ6jxaO/4gyxjT7ElsjCK1blb9UVw6OGwWUNMuqCr1wnJqcKDtzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><h2>Kolo Expense Tracker</h2></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="add+expense.html">Add Expense</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Reports</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="setting.html">Setting</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="logout.html">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-body">
+          <!-- Greeting and User Profile Information -->
+          <div class="row">
+            <div class="col-md-6">
+              <h4>Welcome, Dear [Username]!</h4>
+              <p>This is your personal expense tracker. Start managing your expenses efficiently.</p>
+            </div>
+            <div class="col-md-6">
+              <!-- User Profile Information -->
+              <div class="text-right">
+                <img src="https://cdn.dribbble.com/users/6570629/screenshots/15511980/media/a48e4d758239559dd5c53b14b470a40e.png" alt="Profile Picture" class="img-thumbnail" style="width: 135px; height: auto;">
+                <p><strong>Name:</strong> [Stewie Griffin]</p>
+                <p><strong>Email:</strong> [Stewie's Email]</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Recent Expenses Overview -->
+          <hr>
+          <h4>Recent Expenses Overview</h4>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2024-05-01</td>
+                  <td>Food & Dining</td>
+                  <td>£50.00</td>
+                </tr>
+                <tr>
+                  <td>2024-05-02</td>
+                  <td>Donation</td>
+                  <td>£23.00</td>
+                </tr>
+                <!-- Add more rows for recent expenses -->
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Graphical Representation of Expenses -->
+          <hr>
+          <h4>Expense Distribution</h4>
+          <div id="expenseChart" style="height: 300px;"></div>
+          
+          <!-- Settings and Feedback -->
+          <hr>
+          <div class="text-center">
+            <a href="setting.html">Settings</a> | <a href="rating.html">Feedback</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br><hr><br><br>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3">
+  <div class="container text-center">
+    <!-- APP Made with curiosity! -->
+    <span class="text-muted">App Made with curiosity! | Contact developer:<br>
+      <!-- Email link --><br>
+      <a href="mailto:whoever@gmail.com">Email Developer</a><br>
+      <!-- GitHub link --><br>
+      <a href="https://github.com/Omofolawa/kolotracker" target="_blank">GitHub Repository</a>
+    </span>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  // Sample data for the expense distribution chart
+  var options = {
+    chart: {
+      type: 'pie',
+      height: 300,
+    },
+    series: [20, 30, 15, 35], // Sample data, will be replaced with actual expense data dynamically
+    labels: ['Food & Dining', 'Transportation', 'Entertainment', 'Others'], // Sample labels
+    colors: ['#3f51b5', '#009688', '#ff5722', '#607d8b'], // Sample colors
+  }
+
+  var chart = new ApexCharts(document.querySelector("#expenseChart"), options);
+  chart.render();
+</script>
+</body>
+</html>
