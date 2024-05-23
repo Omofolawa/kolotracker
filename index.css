@@ -1,0 +1,44 @@
+/* Custom styles */
+body {
+  background-image: url('https://images.unsplash.com/photo-1506784242126-2a0b0b89c56a?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+  background-position: center;
+  height: 100vh; /* Ensure full viewport height */
+  margin: 0;
+}
+
+.main-content {
+  text-align: center;
+  color: #fff; /* White text color */
+  margin-top: 100px; /* Adjusted margin to avoid overlap with navbar */
+}
+
+.card {
+  margin: 10px;
+  border: none;
+  border-radius: 15px;
+  transition: transform 0.5s ease;
+  background-color: rgba(255, 225, 135, 0.8); /* Semi-transparent background for cards */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Zoom out effect on hover */
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.navbar {
+  z-index: 1000; /* Ensure navbar appears above other content */
+}
+
+.footer {
+  background-color: rgba(0, 3, 10, 0.8);
+  box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+}
